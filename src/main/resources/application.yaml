@@ -1,0 +1,21 @@
+server.port: 8080
+spring:
+  kafka:
+    consumer:
+      group-id: demo-gateway
+  cloud:
+    stream:
+      kafka:
+        binder:
+          auto-add-partitions: true
+      bindings:
+        demo-request:
+          destination: demoRequest
+          group: demo-gateway
+          consumer:
+            partitioned: true
+        demo-response:
+          destination: demoResponse
+          group: demo-gateway
+          consumer:
+            partitioned: true
