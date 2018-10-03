@@ -20,12 +20,18 @@ public class ResponseListener {
 
     private final Tracer tracer;
     private final Cache<String, String> responseCache;
+    private final Cache<String, Boolean> traceIdCache;
 
     @StreamListener(MessagingChannels.DEMO_RESPONSE)
     public void handleResponse(Message<String> message) {
         String traceId = tracer.currentSpan().context().traceIdString();
-        log.info("Handling response message. traceId: {}, payload: {}", traceId, message.getPayload());
-        responseCache.put(traceId, message.getPayload());
+        if (traceIdCache.containsKey(traceId)) {
+            log.info("Handling response message. traceId: {}, payload: {}, headers: {}", traceId, message.getPayload(), message.getHeaders());
+            responseCache.put(traceId, message.getPayload());
+            traceIdCache.remove(traceId);
+        } else {
+            log.info("ignoring message: {}", traceId);
+        }
     }
 
     String getResponseForMessage(String key) {

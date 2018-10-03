@@ -8,14 +8,18 @@ spring:
       kafka:
         binder:
           auto-add-partitions: true
+        bindings:
+          demo-response:
+            consumer:
+              autoRebalanceEnabled: false
       bindings:
         demo-request:
           destination: demoRequest
           group: demo-gateway
-          consumer:
-            partitioned: true
         demo-response:
           destination: demoResponse
           group: demo-gateway
           consumer:
             partitioned: true
+      instance-index: 0
+      instance-count: 3

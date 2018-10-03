@@ -33,4 +33,13 @@ public class CacheConfig {
                         ResourcePoolsBuilder.heap(1000))
                         .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofSeconds(60))).build());
     }
+
+    @Bean
+    public Cache<String, Boolean> traceIdCache() {
+        String cacheName = "trace-id-cache";
+        return cacheManager().createCache(cacheName,
+                CacheConfigurationBuilder.newCacheConfigurationBuilder(String.class, Boolean.class,
+                        ResourcePoolsBuilder.heap(1000))
+                        .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofSeconds(60))).build());
+    }
 }
